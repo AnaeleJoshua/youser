@@ -1,0 +1,72 @@
+const {DataTypes} = require("sequelize")
+const {roles} = require("../../config/config")
+
+const UserModel = {
+    id:{
+        type:DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    username:{
+        type:DataTypes.STRING,
+        allowNull:false,
+        unique:true,
+    },
+    email:{
+        type:DataTypes.STRING,
+        allowNull:false,
+        unique:true,
+    },
+
+    password:{
+        type:DataTypes.STRING,
+        allowNull:false,
+    }, 
+    age:{
+        type:DataTypes.INTEGER,
+        allowNull:false,
+    }, 
+    role:{
+        type:DataTypes.STRING,
+        allowNull:false,
+        defaultValue: roles.USER
+    }, 
+    firstName:{
+        type:DataTypes.STRING,
+        allowNull:false,
+    },
+    lastName:{
+        type:DataTypes.STRING,
+        allowNull:false,
+    }
+}
+
+module.exports = {
+    initialize : (sequelize)=>{
+
+        this.model = sequelize.define("user",UserModel)
+
+    },
+    createUser:(user)=>{
+        this.model.create(user)
+    },
+    findUser:(query) => {
+        return this.model.findOne({where:query})
+    },
+    updateUser:(query,updatedValue) => {
+        this.model.update(updatedValue,{
+            where:query
+        });
+    },
+
+    findAllUsers:(query) => {
+        return this.model.findAll({
+            where:query
+        });
+    },
+    deleteUser: (query) => {
+        return this.model.destroy({
+            where: query
+        });
+    }
+};
